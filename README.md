@@ -1,6 +1,6 @@
-# YSHOP 意象 CRM
+# YSHOP 意象 AI-CRM
 
-> Spring Boot 3 + Vue3 前后端分离，支持企业微信的 CRM 销售管理系统，助力企业销售全流程精细化、数字化管理。
+> Spring Boot 3 + LangChain4j+ Vue3 前后端分离，打通企业微信，多租户+SCRM一体，帮销售全流程管好客户，AI驱动精细化客户管理，从线索到成交全链路覆盖，直接拉动销售业绩。
 
 **官网：** [https://www.yixiang.co/](https://www.yixiang.co/)
 
@@ -8,13 +8,9 @@
 
 ## 产品简介
 
-支持企业微信的前后端分离 CRM，盘活客户资源、量化销售行为、合理配置资源，覆盖销售与项目协同，建立科学销售体系，提升销售业绩。
+YSHOP意象AI-CRM，打通企业微信，多租户+SCRM一体，帮销售全流程管好客户，AI驱动精细化客户管理，从线索到成交全链路覆盖，直接拉动销售业绩。搭配意象AI-OA，审批、人事、财务、项目全模块打通，业务办公一站搞定，专为销售团队量身打造，告别零散台账，让客户服务每个环节都可控可追溯
 
-**定位：** 线索 → 客户 → 商机 → 合同 → 回款 → 项目
-
-**适用：** 销售团队 / 项目管理 / SCRM / 企业微信协同
-
-**技术栈：** Spring Boot 3 · Spring Security OAuth2 · MyBatis Plus · JWT · Redis · Vue3 · uni-app
+**技术栈：** Spring Boot 3 · LangChain4j  · Spring Security OAuth2 · MyBatis Plus · JWT · Redis · Vue3 · uni-app
 
 ---
 
@@ -27,12 +23,13 @@
 
 ---
 
-## 功能列表
+##AI-CRM 功能列表
 
 | 模块 | 功能 |
 |------|------|
 | 待办 | — |
 | 办公 | 我的日程、审批管理、流程管理、工作汇报、通知管理 |
+| AI助手 | crm小助手、模型配置 |
 | 线索 | 线索管理、线索池、跟进记录 |
 | 客户 | 客户管理、发票管理、客户标签、系统配置、自定义表单 |
 | 商机 | 商机需求、跟进记录 |
@@ -142,7 +139,7 @@
 
 ## 技术栈
 
-**后端：** Spring Boot 3 · Spring Security OAuth2 · MyBatis / MyBatis Plus · Redis · Lombok · Hutool
+**后端：** Spring Boot 3 · LangChain4j  ·  Spring Security OAuth2 · MyBatis / MyBatis Plus · Redis · Lombok · Hutool
 
 **前端：** Vue 3 · Element Plus · uni-app（Vue3）
 
