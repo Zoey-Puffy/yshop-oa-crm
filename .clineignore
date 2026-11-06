@@ -1,0 +1,33 @@
+# Git
+.git/
+.gitignore
+
+# 前端依赖
+**/node_modules/
+**/dist/
+**/build/
+
+# Java 构建产物
+**/target/
+**/.gradle/
+
+# IDE
+**/.idea/
+**/.vscode/
+
+# 日志
+**/logs/
+**/*.log
+
+# 缓存
+**/.cache/
+**/coverage/
+
+# 临时文件
+**/*.tmp
+**/*.bak
+
+# 大型导出文件
+**/*.xlsx
+**/*.zip
+**/*.jar
