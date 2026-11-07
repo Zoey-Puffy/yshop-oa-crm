@@ -1,4 +1,4 @@
-# 后端接口清单（CRM）
+﻿# 后端接口清单（CRM）
 
 > 基础路径：`/admin-api`（前端 `VITE_API_URL`）+ Controller 的 `@RequestMapping`。
 > 完整路径 = `/admin-api` + 下表中的路径。
@@ -43,6 +43,15 @@
 > 注：`saveRedisSet`/`getRedisSet` 读写的 Redis key（`customerNum`、`notRecordDay`、`notSuccessDay`）与 `CustomerAutoJob` 读取的 key 一致，修改时需同步检查。
 
 ## 3. 联系人（`CrmCustomerContactsController`，`/crm/customer-contacts`）
+| HTTP | 路径 | 方法 | Service 方法 | 用途 | 前端调用 |
+|------|------|------|--------------|------|----------|
+| POST | `/crm/customer-contacts/create` | `createCustomerContacts` | `CrmCustomerContactsService` | 新增联系人 | `CustomerContactsForm.vue` |
+| PUT | `/crm/customer-contacts/update` | `updateCustomerContacts` | 同上 | 修改联系人 | `CustomerContactsForm.vue` |
+| DELETE | `/crm/customer-contacts/delete?id=` | `deleteCustomerContacts` | 同上 | 删除联系人 | `crmcustomercontacts/index.vue` |
+| GET | `/crm/customer-contacts/get?id=` | `getCustomerContacts` | 同上 | 联系人详情 | `ContactsDetail.vue` |
+| GET | `/crm/customer-contacts/page` | `getCustomerContactsPage` | 同上 | 联系人分页 | `crmcustomercontacts/index.vue` |
+| GET | `/crm/customer-contacts/export-excel` | 前端 API 定义，后端未找到映射 | — | 导出联系人（**前后端不一致**） | `exportCustomerContacts`，`crmcustomercontacts/index.vue` |
+| GET | `/crm/customer-contacts/get-import-template` | 前端 API 定义，后端未找到映射 | — | 导入模板（**前后端不一致**） | `api/crm/crmcustomercontacts` 中定义，调用位置待验证 |
 
 
 ## 4. 商机（`CrmBusinessController`，`/crm/business`）
@@ -79,6 +88,12 @@
 | POST | `/crm/contract-receivables/create` | `createContractReceivables` | `CrmContractReceivablesService.createContractReceivables` | 新增回款（生成审批） | `ContractReceivablesForm.vue` |
 | PUT | `/crm/contract-receivables/update` | `updateContractReceivables` | `updateContractReceivables` | 修改回款 | `ContractReceivablesForm*.vue` |
 | DELETE | `/crm/contract-receivables/delete?id=` | `deleteContractReceivables` | `deleteContractReceivables` | 删除回款 | `crmcontractreceivables/index.vue` |
+| GET | `/crm/contract-receivables/get?id=` | `getContractReceivables` | `getContractReceivables` | 回款详情 | `ContractReceivablesForm*.vue` |
+| GET | `/crm/contract-receivables/page` | `getContractReceivablesPage` | `getContractReceivablesPage` | 回款分页 | `crmcontractreceivables/index.vue`、`Home/components/receivables/index.vue`、`crmcustomer/components/receivables/index.vue` |
+| GET | `/crm/contract-receivables/getCode` | `getCode` | `getCode` | 生成回款编号 | `ContractReceivablesForm.vue` |
+| POST | `/crm/contract-receivables/check` | `check` | `check(CheckInfoVO)` | 回款审核 | `ContractReceivablesForm2.vue` |
+| POST | `/crm/order/pay` | 见第 10 节（`PayController`） | — | 回款在线支付（生成二维码） | `ContractReceivablesForm.vue`（`pay({from:'', paytype:'weixin', uni})`） |
+| GET | `/crm/contract-receivables/export-excel` | 后端未找到映射 | — | 导出回款（**前后端不一致**） | `ContractReceivablesApi.exportContractReceivables` |
 
 ## 7. 审批流程与审批记录
 
@@ -109,6 +124,15 @@
 ## 8. 发票（`CrmInvoiceController`，`/crm/invoice`）
 
 | HTTP | 路径 | 方法 | Service 方法 | 权限 | 用途 | 前端调用 |
+|------|------|------|--------------|------|------|----------|
+| POST | `/crm/invoice/create` | `createInvoice` | `CrmInvoiceService.createInvoice` | `crm:invoice:create` | 新增开票申请（生成审批） | `InvoiceForm.vue` |
+| PUT | `/crm/invoice/update` | `updateInvoice` | `updateInvoice` | `crm:invoice:update` | 修改发票申请 | `InvoiceForm.vue` |
+| DELETE | `/crm/invoice/delete?id=` | `deleteInvoice` | `deleteInvoice` | `crm:invoice:delete` | 删除发票 | `crminvoice/index.vue` |
+| GET | `/crm/invoice/get?id=` | `getInvoice` | `getInvoice` | `crm:invoice:query` | 发票详情 | `InvoiceForm*.vue` |
+| GET | `/crm/invoice/page` | `getInvoicePage` | `getInvoicePage` | `crm:invoice:query` | 发票分页 | `crminvoice/index.vue`、`index2.vue`、`Home/components/invoice/index.vue` |
+| POST | `/crm/invoice/check` | `check` | `check(CheckInfoVO)` | 无 `@PreAuthorize` | 发票审核 | `InvoiceForm2.vue` |
+| PUT | `/crm/invoice/issue` | `issueInvoice` | `issueInvoice` | 无 `@PreAuthorize` | 开票（状态置为已开票） | `InvoiceForm3.vue` |
+| GET | `/crm/invoice/export-excel` | 后端未找到映射 | — | 导出发票（**前后端不一致**） | `InvoiceApi.exportInvoice`，`crminvoice/index.vue` |
 
 ## 9. 跟进记录、操作日志、首页统计、业绩
 
@@ -151,6 +175,16 @@
 |------|------|------|------|------|----------|
 | POST | `/crm/achievement/create` | `createAchievement` | `crm:achievement:create` | 新增业绩目标（部门或员工） | `crmachievement/index.vue`、`AchievementForm*.vue` |
 
+## 10. 在线支付（`PayController`，`/crm/order`）
+
+| HTTP | 路径 | 方法 | 鉴权 | 用途 | 说明 |
+|------|------|------|------|------|------|
+| POST | `/crm/order/pay` | `pay` | `@PreAuthenticated`（需登录） | 回款在线支付：根据回款编号 `uni` 生成微信/支付宝二维码 | 前端 `ContractReceivablesApi.pay`（`ContractReceivablesForm.vue`） |
+
+| GET/POST（待验证） | `/crm/order/notify/payBack{detailsId}.json` | `payBack` | 免登录（`yshop.security.permit-all_urls` 放行 `/admin-api/crm/order/notify/**`） | 支付渠道异步回调，交由 `PayServiceManager.payBack` 处理 | 成功后经 `PayNoticeConsumer` 消费 MQ 消息，调用 `PayServiceImpl.paySuccess` |
+
+
+> 注：源码中 `@RequestMapping(value = "/notify/payBack{detailsId}.json")` 的 `{detailsId}` 与 `.json` 之间没有分隔符，实际回调地址与商户后台 `notify_url` 是否一致，**待验证**。
 ## 11. 前后端不一致汇总（已通过路径差集核实）
 
 以下路径为「前端 `src/api/crm/**/*.ts` 中定义，但后端 CRM Controller 无对应映射」。判定方法：提取前端所有 `/crm/...` 字符串与后端 `@RequestMapping` + `@XxxMapping` 拼接结果做差集。
@@ -181,38 +215,3 @@
 | GET | `/crm/achievement/count?type=&year=&month=` | `getAchievementCount` | 无 `@PreAuthorize` | 业绩统计（首页图表） | `Home/components/echart/index.vue`（**具体方法待验证**） |
 | GET | `/crm/achievement/detailCount` | `getAchievementDetailCount` | 无 `@PreAuthorize` | 员工业绩明细 | `crmachievement/index.vue`（待验证） |
 
-## 10. 在线支付（`PayController`，`/crm/order`）
-
-| HTTP | 路径 | 方法 | 鉴权 | 用途 | 说明 |
-|------|------|------|------|------|------|
-| POST | `/crm/order/pay` | `pay` | `@PreAuthenticated`（需登录） | 回款在线支付：根据回款编号 `uni` 生成微信/支付宝二维码 | 前端 `ContractReceivablesApi.pay`（`ContractReceivablesForm.vue`） |
-| GET/POST（待验证） | `/crm/order/notify/payBack{detailsId}.json` | `payBack` | 免登录（`yshop.security.permit-all_urls` 放行 `/admin-api/crm/order/notify/**`） | 支付渠道异步回调，交由 `PayServiceManager.payBack` 处理 | 成功后经 `PayNoticeConsumer` 消费 MQ 消息，调用 `PayServiceImpl.paySuccess` |
-
-> 注：源码中 `@RequestMapping(value = "/notify/payBack{detailsId}.json")` 的 `{detailsId}` 与 `.json` 之间没有分隔符，实际回调地址与商户后台 `notify_url` 是否一致，**待验证**。
-
-|------|------|------|--------------|------|------|----------|
-| POST | `/crm/invoice/create` | `createInvoice` | `CrmInvoiceService.createInvoice` | `crm:invoice:create` | 新增开票申请（生成审批） | `InvoiceForm.vue` |
-| PUT | `/crm/invoice/update` | `updateInvoice` | `updateInvoice` | `crm:invoice:update` | 修改发票申请 | `InvoiceForm.vue` |
-| DELETE | `/crm/invoice/delete?id=` | `deleteInvoice` | `deleteInvoice` | `crm:invoice:delete` | 删除发票 | `crminvoice/index.vue` |
-| GET | `/crm/invoice/get?id=` | `getInvoice` | `getInvoice` | `crm:invoice:query` | 发票详情 | `InvoiceForm*.vue` |
-| GET | `/crm/invoice/page` | `getInvoicePage` | `getInvoicePage` | `crm:invoice:query` | 发票分页 | `crminvoice/index.vue`、`index2.vue`、`Home/components/invoice/index.vue` |
-| POST | `/crm/invoice/check` | `check` | `check(CheckInfoVO)` | 无 `@PreAuthorize` | 发票审核 | `InvoiceForm2.vue` |
-| PUT | `/crm/invoice/issue` | `issueInvoice` | `issueInvoice` | 无 `@PreAuthorize` | 开票（状态置为已开票） | `InvoiceForm3.vue` |
-| GET | `/crm/invoice/export-excel` | 后端未找到映射 | — | 导出发票（**前后端不一致**） | `InvoiceApi.exportInvoice`，`crminvoice/index.vue` |
-
-| GET | `/crm/contract-receivables/get?id=` | `getContractReceivables` | `getContractReceivables` | 回款详情 | `ContractReceivablesForm*.vue` |
-| GET | `/crm/contract-receivables/page` | `getContractReceivablesPage` | `getContractReceivablesPage` | 回款分页 | `crmcontractreceivables/index.vue`、`Home/components/receivables/index.vue`、`crmcustomer/components/receivables/index.vue` |
-| GET | `/crm/contract-receivables/getCode` | `getCode` | `getCode` | 生成回款编号 | `ContractReceivablesForm.vue` |
-| POST | `/crm/contract-receivables/check` | `check` | `check(CheckInfoVO)` | 回款审核 | `ContractReceivablesForm2.vue` |
-| POST | `/crm/order/pay` | 见第 10 节（`PayController`） | — | 回款在线支付（生成二维码） | `ContractReceivablesForm.vue`（`pay({from:'', paytype:'weixin', uni})`） |
-| GET | `/crm/contract-receivables/export-excel` | 后端未找到映射 | — | 导出回款（**前后端不一致**） | `ContractReceivablesApi.exportContractReceivables` |
-
-| HTTP | 路径 | 方法 | Service 方法 | 用途 | 前端调用 |
-|------|------|------|--------------|------|----------|
-| POST | `/crm/customer-contacts/create` | `createCustomerContacts` | `CrmCustomerContactsService` | 新增联系人 | `CustomerContactsForm.vue` |
-| PUT | `/crm/customer-contacts/update` | `updateCustomerContacts` | 同上 | 修改联系人 | `CustomerContactsForm.vue` |
-| DELETE | `/crm/customer-contacts/delete?id=` | `deleteCustomerContacts` | 同上 | 删除联系人 | `crmcustomercontacts/index.vue` |
-| GET | `/crm/customer-contacts/get?id=` | `getCustomerContacts` | 同上 | 联系人详情 | `ContactsDetail.vue` |
-| GET | `/crm/customer-contacts/page` | `getCustomerContactsPage` | 同上 | 联系人分页 | `crmcustomercontacts/index.vue` |
-| GET | `/crm/customer-contacts/export-excel` | 前端 API 定义，后端未找到映射 | — | 导出联系人（**前后端不一致**） | `exportCustomerContacts`，`crmcustomercontacts/index.vue` |
-| GET | `/crm/customer-contacts/get-import-template` | 前端 API 定义，后端未找到映射 | — | 导入模板（**前后端不一致**） | `api/crm/crmcustomercontacts` 中定义，调用位置待验证 |

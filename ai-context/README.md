@@ -41,7 +41,7 @@
 ## 四、已有规则与记忆文件（只读参考）
 
 - 根目录 `.clinerules/`：全局与后端开发规则（`00-global.md`、`01-backend.md`）。
-- 根目录 `ai-content/memory-bank/`：开发记忆文件（`activeContext.md`、`decisions.md`、`progress.md`），当前内容基本为空模板，待项目组补充。
+- 根目录 `ai-context/memory-bank/`：开发记忆文件（`activeContext.md`、`decisions.md`、`progress.md`），当前内容基本为空模板，待项目组补充。
 
 ## 五、本次分析范围与限制
 
