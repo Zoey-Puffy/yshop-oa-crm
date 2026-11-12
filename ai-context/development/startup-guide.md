@@ -5,15 +5,22 @@
 
 ## 1. 环境要求
 
-| 依赖 | 版本 | 来源 |
-|------|------|------|
-| JDK | **17**（父 POM `java.version`） | `yshop-crm/pom.xml` |
-| Maven | 3.8+ | `README.md` |
-| MySQL | 8 | `README.md`、`docker-compose.yml`（`mysql:8`） |
-| Redis | 6+ | `README.md`、`docker-compose.yml`（`redis:6-alpine`） |
-| Node.js | 16+（`engines.node >= 16.0.0`） | `yshop-crm-vue/package.json` |
-| pnpm | 8.6+（`engines.pnpm >= 8.6.0`） | `yshop-crm-vue/package.json` |
-| IDE | 后端 IntelliJ IDEA（工程中存在 `.idea/`）；前端 VS Code | `README.md` |
+| 依赖 | 要求版本 | 实际安装版本 | 来源 |
+|------|----------|--------------|------|
+| JDK | **17**（父 POM `java.version`） | **17.0.12** ✅ | `yshop-crm/pom.xml` |
+| Maven | 3.8+ | **3.9.11** ✅（IntelliJ 内置） | `README.md` |
+| MySQL | 8 | **8.0.45** ✅ | `README.md`、`docker-compose.yml`（`mysql:8`） |
+| Redis | 6+ | **Docker redis:6-alpine**（需启动容器） | `README.md`、`docker-compose.yml`（`redis:6-alpine`） |
+| Node.js | 16+（`engines.node >= 16.0.0`） | **24.16.0** ✅ | `yshop-crm-vue/package.json` |
+| pnpm | 8.6+（`engines.pnpm >= 8.6.0`） | **12.18.0** ✅ | `yshop-crm-vue/package.json` |
+| Docker Desktop | — | **29.9.3** ✅（用于运行 Redis） | — |
+| IDE | 后端 IntelliJ IDEA；前端 VS Code | **IntelliJ IDEA 2026.1** ✅ | `README.md` |
+
+> **Maven 说明**：Maven CLI 通过 IntelliJ IDEA 内置 Maven（`C:\Program Files\JetBrains\IntelliJ IDEA 2026.1\plugins\maven\lib\maven3\bin`）添加到系统 PATH，使用 `mvn` 命令即可调用。单独打开新终端后需确保 PATH 已刷新。
+
+> **环境变量配置**
+> - `JAVA_HOME = C:\Program Files\Java\jdk-17`（已配置 ✅）
+> - Maven 路径已追加到用户 PATH（持久化），新终端自动生效
 
 > ⚠ **版本差异**：`yshop-crm/yshop-server/Dockerfile` 基础镜像为 `eclipse-temurin:21-jre`（JRE 21），与开发环境要求的 JDK 17 不一致。Docker 部署与本地开发的 JDK 版本需要统一确认（**待验证**）。
 
