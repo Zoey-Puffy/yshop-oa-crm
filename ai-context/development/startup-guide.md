@@ -10,7 +10,7 @@
 | JDK | **17**（父 POM `java.version`） | **17.0.12** ✅ | `yshop-crm/pom.xml` |
 | Maven | 3.8+ | **3.9.11** ✅（IntelliJ 内置） | `README.md` |
 | MySQL | 8 | **8.0.45** ✅ | `README.md`、`docker-compose.yml`（`mysql:8`） |
-| Redis | 6+ | **Docker redis:6-alpine**（需启动容器） | `README.md`、`docker-compose.yml`（`redis:6-alpine`） |
+| Redis | 6+ | **6.2.24** ✅（Docker 容器 `yshop-redis`） | `README.md`、`docker-compose.yml`（`redis:6-alpine`） |
 | Node.js | 16+（`engines.node >= 16.0.0`） | **24.16.0** ✅ | `yshop-crm-vue/package.json` |
 | pnpm | 8.6+（`engines.pnpm >= 8.6.0`） | **12.18.0** ✅ | `yshop-crm-vue/package.json` |
 | Docker Desktop | — | **29.9.3** ✅（用于运行 Redis） | — |
@@ -26,13 +26,21 @@
 
 ## 2. 后端启动
 
-### 2.1 初始化数据库（已确认）
+### 2.1 初始化数据库（已验证 ✅ 2026-11-15）
 
-1. 创建数据库，例如 `yshop-crm-open-source`（本地配置 `application-local.yaml` 使用的库名）。
-2. 导入 `yshop-crm/sql/yshop-crm-open-source.sql`（约 11.8 MB，包含表结构与示例数据）。
-3. 增量索引脚本 `yshop-crm/sql/migration/20261008_p0_crm_business_indexes.sql` 不包含在全量脚本中，是否已在目标库执行需要自行确认（**待验证**）。
+1. 创建数据库 `yshop-crm-open-source`
+2. 导入 `yshop-crm/sql/yshop-crm-open-source.sql`（约 11.8 MB，包含表结构与示例数据）
+3. 执行增量索引脚本 `yshop-crm/sql/migration/20261008_p0_crm_business_indexes.sql`
 
-> 注：`application-dev.yaml` 指向的库名为 `yshop_crm`，与本地库名不同，请按所用 profile 创建对应库。
+> **当前状态**：数据库 `yshop-crm-open-source` 已存在，共 90 张表（含 16 张 CRM 业务表），增量索引已全部执行。详见表结构现状：
+> - 字符集: `utf8mb4` ✅
+> - 排序规则: `utf8mb4_general_ci`（服务器默认 `utf8mb4_0900_ai_ci`）
+> - 引擎: InnoDB + Dynamic 行格式
+> - SQL mode: `ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,...`
+> - `system_users` 表包含示例用户数据
+> - `system_menu` 表包含菜单数据
+
+> 注：`application-dev.yaml` 指向的库名为 `yshop_crm`，与本地 `yshop-crm-open-source` 不同，请按所用 profile 创建对应库。
 
 ### 2.2 修改配置（已确认）
 
@@ -52,6 +60,9 @@
 - `yshop.pay.order-notify-url`、`refund-notify-url`（支付回调地址，需公网可访问，本地通常使用内网穿透）
 - `yshop.file-path`（文件与二维码保存目录；**`application-local.yaml` 中为 macOS 路径**，Windows 环境需修改）
 - `yshop.tencent-lbs-key`（地图服务密钥，属于第三方密钥）
+
+> **已修改**：`application-local.yaml` 中 MySQL `password` 已从 `root` 改为实际密码。
+> **Redis 配置不需修改**：host=127.0.0.1、port=6379、database=0、无密码，与运行环境一致。
 
 > ⚠ 以上配置文件中已存在数据库、微信、钉钉、企业微信、地图等密钥。**不要把真实密钥提交到版本库**，建议通过本地未跟踪的配置或环境变量覆盖。
 
@@ -108,7 +119,7 @@ pnpm install
 2. 前端：访问 `http://localhost:80`（`.env` 中 `VITE_PORT=80`），登录后能加载菜单即说明前后端连通。
 3. 验证码：`application-local.yaml` 中 `yshop.captcha.enable: false`（本地关闭），而前端 `.env.local` 中 `VITE_APP_CAPTCHA_ENABLE=true`。两者是否影响登录流程，**待验证**（以实际登录页为准）。
 
-## 5. 常见问题（基于配置推断，待验证）
+## 5. 常见问题（已部分验证 ✅）
 
 | 现象 | 可能原因 | 排查方向 |
 |------|----------|----------|

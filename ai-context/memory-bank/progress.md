@@ -30,10 +30,33 @@
 - `pnpm -v` 验证通过（12.18.0）
 - `docker --version` 验证通过（29.9.3）
 - `mysql --version` 验证通过（8.0.45）
+- **数据库验证**：
+  - ✅ `mysql -u root -p` 连接成功（实际密码已确认）
+  - ✅ `SHOW DATABASES` — `yshop-crm-open-source` 存在
+  - ✅ `SHOW TABLES` — 90 张表（16 张 CRM 表）
+  - ✅ 增量索引已全部应用到 7 张核心表
+- **Redis 验证**：
+  - ✅ `docker run redis:6-alpine` — 容器 `yshop-redis` 运行中
+  - ✅ `redis-cli PING` → PONG
+  - ✅ `redis-cli CONFIG GET requirepass` → 空（无密码）
+  - ✅ `redis-cli SELECT 0` → OK
+- **配置验证**：
+  - ✅ `application-local.yaml` MySQL password 已更新
+  - ✅ `application-local.yaml` Redis 配置与环境一致（host=127.0.0.1:6379, db=0）
+
+### Phase 3: 数据库与 Redis 初始化（已完成 ✅ 2026-11-15）
+- ✅ MySQL 8.0.45 连接验证 — root@localhost 可连接，实际密码已确认
+- ✅ 数据库 `yshop-crm-open-source` 已存在，90 张表（含 16 张 CRM 业务表）
+- ✅ 全量 SQL 已导入 — 表结构与示例数据就绪
+- ✅ 增量索引已执行 — 7 张 CRM 表共 13 个组合索引
+- ✅ `application-local.yaml` MySQL password 已从 `root` 改为实际密码 `mysql1234`
+- ✅ Redis 6.2.24 已通过 Docker 启动（容器 `yshop-redis`）
+- ✅ Redis 连接验证 — PING → PONG，端口 6379，无密码
+- ✅ Spring Boot 配置一致性确认 — MySQL 和 Redis 连接参数与环境一致
 
 未完成事项：
 - 运行期行为（支付回调、定时任务执行结果等）尚未验证
 - 部分前端页面后缀带 `2`、`3` 的页面是否仍在菜单中使用，待验证
-- 后续任务：创建数据库 → 修改配置 → Maven 编译 → 启动后端 → 启动前端 → 登录验证
+- 后续任务：Maven 编译 → 启动后端 → 启动前端 → 登录验证
 
 更新频率：阶段性更新
